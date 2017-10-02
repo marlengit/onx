@@ -15,3 +15,21 @@ Phase 2 - Settlement
 
 After the final order block there are no further user steps necessary. After the fork block settlement is processed autonomously by the BUC0 nodes. Valid settlement transactions need exclusive mining priority to prevent double spend attacks but no other special tasks are required. After processing all orders, the onchain exchange is shutdown at the stop block which is 30 blocks after the fork block. The temporary rules enforcing high priority for valid settlement transactions are terminated. There are also some clean up tasks that are possible which prune all UTXOs that contain the bid and offer data.
 
+The protocol requires users to know of three special exchange rules :
+
+Exchange Rule 1
+To be valid all exchange transactions must be confirmed before the fork block. Users are therefore advised to send all their order transactions before the final orders block.
+
+The reason for this rule is that each exchange is made up of multiple required transactions. The final orders block is the cutoff for users to send order transactions safely. The fork block – 1 is the last block for order transactions to possibly be recognized as valid. Transactions after that will only confirm on the BSC1 chain which the BUC0 nodes cannot know since only one chain is followed. BUC0 nodes can only recognize what is confirmed into their own chain so only confirmed funding will lead to valid settlement transactions. The final orders block needs to be early enough in case of relaying issues.
+
+Exchange Rule 2 
+To be valid all exchange transactions must have sufficient quantities using the agreed price formulas. Otherwise the order may be invalid and the sender may not be able to recover their coins.
+
+The reason for this rule is that too few quantities transferred in an exchange cannot be accepted as fair settlement. The responsibility is upon the user who creates the exchange transaction to send the right amount. If too little are sent the settlement order will remain invalid. Therefore the user may not be able to recover their coins. 
+
+Exchange Rule 3 
+To be valid exchange transactions may require extra mining fees to prevent order spamming.
+
+The reason for this rule is to prevent attackers creating thousands of orders to prevent the smooth functioning of the exchange. Transactions which do not include the required extra mining fees are ignored by ONX clients.
+
+All the risks are limited through using a well tested client to automate timely broadcasting and careful calculation of the order quantity and fees.
